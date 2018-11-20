@@ -24,9 +24,13 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
+		//添加帧限定符来防止粘包现象
         pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
+		//解码和编码，应和客户端一致
         pipeline.addLast(DECODER);
         pipeline.addLast(ENCODER);
+		
+		//业务逻辑实现类
         pipeline.addLast(SERVER_HANDLER);
     }
 }

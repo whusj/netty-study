@@ -14,11 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ChannelHandler.Sharable
 public class ClientHandler extends SimpleChannelInboundHandler<String>{
+    //打印读取到的数据
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         log.error(msg);
     }
 
+    //异常数据捕获
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
