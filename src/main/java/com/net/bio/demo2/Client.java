@@ -1,4 +1,4 @@
-package com.net.bio;
+package com.net.bio.demo2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,46 +7,34 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * 客户端消息处理线程
- * 用于处理一个客户端的Socket链路
+ * 阻塞式I/O创建的客户端
  * <p>ClassName:</p>
  * <p>Description:</p>
  * <p>Author:Songjiang</p>
  * <p>CreateDate:2018/11/19</p>
  */
-public class ServerHandler implements Runnable {
-    private Socket socket;
-    public ServerHandler(Socket socket) {
-        this.socket = socket;
+public class Client {
+    //默认的端口号
+    private static int DEFAULT_SERVER_PORT = 8088;
+    private static String DEFAULT_SERVER_IP = "127.0.0.1";
+    public static void send(String expression){
+        send(DEFAULT_SERVER_PORT,expression);
     }
-
-    @Override
-    public void run() {
+    public static void send(int port,String expression){
+        System.out.println("算术表达式为：" + expression);
+        Socket socket = null;
         BufferedReader in = null;
         PrintWriter out = null;
         try{
+            socket = new Socket(DEFAULT_SERVER_IP,port);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(),true);
-            String expression;
-            String result;
-            while(true){
-                //通过BufferedReader读取一行
-                //如果已经读到输入流尾部，返回null,退出循环
-                //如果得到非空值，就尝试计算结果并返回
-                if((expression = in.readLine())==null) break;
-                System.out.println("服务器收到消息：" + expression);
-                try{
-                    //result = Calculator.cal(expression).toString();
-                    result = "<"+expression+">";
-                }catch(Exception e){
-                    result = "计算错误：" + e.getMessage();
-                }
-                out.println(result);
-            }
+            out.println(expression);
+            System.out.println("___结果为：" + in.readLine());
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            //一些必要的清理工作
+            //一下必要的清理工作
             if(in != null){
                 try {
                     in.close();

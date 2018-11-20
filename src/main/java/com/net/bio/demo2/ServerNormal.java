@@ -1,4 +1,4 @@
-package com.net.bio;
+package com.net.bio.demo2;
 
 import java.io.IOException;
 import java.net.ServerSocket;
